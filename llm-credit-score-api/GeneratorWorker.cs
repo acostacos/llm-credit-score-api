@@ -1,46 +1,52 @@
-﻿using llm_credit_score_api.Services.Interfaces;
+﻿using llm_credit_score_api.Messages;
+using llm_credit_score_api.Models;
+using llm_credit_score_api.Services.Interfaces;
+using System.Threading.Channels;
 
 namespace llm_credit_score_api
 {
     public class GeneratorWorker : BackgroundService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly ChannelReader<AppTask> _channel;
         private readonly ILogger<GeneratorWorker> _logger;
 
-        public GeneratorWorker(IServiceProvider serviceProvider, ILogger<GeneratorWorker> logger)
+        public GeneratorWorker(IServiceProvider serviceProvider, ChannelReader<AppTask> channel, ILogger<GeneratorWorker> logger)
         {
             _serviceProvider = serviceProvider;
+            _channel = channel;
             _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            await foreach (var task in _channel.ReadAllAsync(stoppingToken))
             {
-                if (_logger.IsEnabled(LogLevel.Information))
+                try
                 {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                    await DoWork(task, stoppingToken);
                 }
-
-                await DoWork(stoppingToken);
-
-                await Task.Delay(1000, stoppingToken);
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                }
             }
         }
 
-        private async Task DoWork(CancellationToken stoppingToken)
+        private async Task DoWork(AppTask task, CancellationToken stoppingToken)
         {
             try
             {
                 using var scope = _serviceProvider.CreateScope();
                 var generatorService = scope.ServiceProvider.GetRequiredService<IGeneratorService>();
+                await generatorService.GenerateReport(task.TaskId);
 
-                var queuedTasks = generatorService.GetQueuedTasks();
-                if (queuedTasks.Count() > 0)
-                {
-                    var task = queuedTasks.First();
-                    await generatorService.GenerateReport(task.TaskId);
-                }
+                //var queuedTasks = generatorService.GetQueuedTasks();
+                //if (queuedTasks.Count() > 0)
+                //{
+                //    var task = queuedTasks.First();
+                //    await generatorService.GenerateReport(task.TaskId);
+                //}
             }
             catch (Exception ex)
             {

@@ -1,11 +1,13 @@
 using llm_credit_score_api;
 using llm_credit_score_api.Data;
 using llm_credit_score_api.Data.Interfaces;
+using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services;
 using llm_credit_score_api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Channels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +20,12 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IGeneratorService, GeneratorService>();
 
+builder.Services.AddSingleton(Channel.CreateUnbounded<AppTask>(new UnboundedChannelOptions() { SingleReader = true }));
+builder.Services.AddSingleton(svc => svc.GetRequiredService<Channel<AppTask>>().Reader);
+builder.Services.AddSingleton(svc => svc.GetRequiredService<Channel<AppTask>>().Writer);
+
 builder.Services.AddHostedService<GeneratorWorker>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("sqlite"))

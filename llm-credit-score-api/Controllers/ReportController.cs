@@ -18,9 +18,9 @@ namespace llm_credit_score_api.Controllers
         }
 
         [HttpGet("get")]
-        public IActionResult GetReport([FromQuery] GetReportRequest request)
+        public async Task<IActionResult> GetReport([FromQuery] GetReportRequest request)
         {
-            var response = _reportService.GetReport(request);
+            var response = await _reportService.GetReport(request);
             if (response.Exception != null)
             {
                 return BadRequest(response);

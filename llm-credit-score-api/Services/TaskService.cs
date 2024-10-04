@@ -3,17 +3,20 @@ using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services.Interfaces;
+using System.Threading.Channels;
 
 namespace llm_credit_score_api.Services
 {
     public class TaskService : ITaskService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ChannelWriter<AppTask> _channel;
         private readonly ILogger<TaskService> _logger;
 
-        public TaskService(IUnitOfWork unitOfWork, ILogger<TaskService> logger)
+        public TaskService(IUnitOfWork unitOfWork, ChannelWriter<AppTask> channel, ILogger<TaskService> logger)
         {
             _unitOfWork = unitOfWork;
+            _channel = channel;
             _logger = logger;
         }
 
@@ -47,6 +50,7 @@ namespace llm_credit_score_api.Services
                 taskRepo.Add(task);
 
                 await _unitOfWork.SaveChangesAsync();
+                await _channel.WriteAsync(task);
                 return new CreateTaskResponse() { Task = task };
             }
             catch (Exception ex)

@@ -3,6 +3,7 @@ using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services.Interfaces;
+using System.Text.Json;
 
 namespace llm_credit_score_api.Services
 {
@@ -10,12 +11,14 @@ namespace llm_credit_score_api.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMessageService _messageService; 
+        private readonly IReportService _reportService;
         private readonly ILogger<GeneratorService> _logger;
 
-        public GeneratorService(IUnitOfWork unitOfWork, IMessageService messageService, ILogger<GeneratorService> logger)
+        public GeneratorService(IUnitOfWork unitOfWork, IMessageService messageService, IReportService reportService, ILogger<GeneratorService> logger)
         {
             _unitOfWork = unitOfWork;
             _messageService = messageService;
+            _reportService = reportService;
             _logger = logger;
         }
 
@@ -61,11 +64,26 @@ namespace llm_credit_score_api.Services
                     throw new Exception("Invalid company passed");
                 }
 
-                // Aggregate information into data
+                // TODO: Aggregate information into data
+                var prompt = "";
 
-                // Send API Request
+                var report = await GetLLMResponse(prompt);
 
-                // Save Report to Database
+                var createReportReq = new CreateReportRequest()
+                {
+                    CompanyId = company.CompanyId,
+                    TaskId = task.TaskId,
+                    Content = report,
+                };
+                var response = await _reportService.CreateReport(createReportReq);
+                if (response.Exception != null)
+                {
+                    throw response.Exception;
+                }
+                if (response.Report == null)
+                {
+                    throw new Exception("Report not created");
+                }
             }
             catch (Exception ex)
             {
@@ -79,11 +97,13 @@ namespace llm_credit_score_api.Services
             }
         }
 
-        private async void SendAPIRequest()
+        private async Task<string> GetLLMResponse(string prompt)
         {
-            // Do Exponential Backoff
             var body = new LLMRequest();
-            var response = await _messageService.PostAsync<LLMResponse>(LLMConstants.Url, body);
+            var jsonDecodeOpt = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
+            var response = await _messageService.PostAsync<LLMResponse>(LLMConstants.Url, body, jsonDecodeOpt);
+            var message = response.Choices.FirstOrDefault(x => x.Message.Role == "assistant")?.Message.Content;
+            return message ?? "";
         }
     }
 }

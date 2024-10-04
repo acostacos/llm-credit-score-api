@@ -19,10 +19,43 @@ namespace llm_credit_score_api.Services
             _logger = logger;
         }
 
-        public GetReportResponse GetReport(GetReportRequest request)
+        public async Task<GetReportResponse> GetReport(GetReportRequest request)
         {
-            Console.WriteLine("view test");
-            return new GetReportResponse();
+            try
+            {
+                var reportRepo = _unitOfWork.GetRepository<Report>();
+                var reports = await reportRepo.GetAllAsync();
+                return new GetReportResponse() { Reports = reports };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new GetReportResponse() { Exception = ex };
+            }
+        }
+
+        public async Task<CreateReportResponse> CreateReport(CreateReportRequest request)
+        {
+            try
+            {
+                var reportRepo = _unitOfWork.GetRepository<Report>();
+                var report = new Report()
+                {
+                    CompanyId = request.CompanyId,
+                    TaskId = request.TaskId,
+                    Content = request.Content,
+                    CreateDate = DateTime.Now,
+                };
+                reportRepo.Add(report);
+                await _unitOfWork.SaveChangesAsync();
+
+                return new CreateReportResponse() { Report = report };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new CreateReportResponse() { Exception = ex };
+            }
         }
 
         public async Task<GenerateReportResponse> GenerateReport(GenerateReportRequest request)

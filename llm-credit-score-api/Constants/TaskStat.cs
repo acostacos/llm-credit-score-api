@@ -3,7 +3,7 @@
     public static class TaskStat
     {
         public const string Queued = "Queued";
-        public const string InProgress = "InProgress ";
+        public const string InProgress = "InProgress";
         public const string Error = "Error";
         public const string Done = "Done";
     }
