@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace llm_credit_score_api.Models
 {
     public class AppTask
     {
-        [Column("task_id")]
-        public int Id { get; set; }
+        [Key, Column("task_id")]
+        public int TaskId { get; set; }
         [Column("task_key")]
         public required string TaskKey { get; set; }
         [Column("status")]
@@ -16,5 +17,6 @@ namespace llm_credit_score_api.Models
         public int? ReportId { get; set; }
         [Column("create_date")]
         public DateTime CreateDate { get; set; }
+        public Report? Report { get; set; }
     }
 }

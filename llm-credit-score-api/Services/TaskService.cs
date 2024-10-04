@@ -1,5 +1,4 @@
 ﻿using llm_credit_score_api.Constants;
-using llm_credit_score_api.Data.Interfaces;
 using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;

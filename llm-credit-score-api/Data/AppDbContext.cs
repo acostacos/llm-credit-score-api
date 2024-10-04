@@ -8,6 +8,7 @@ namespace llm_credit_score_api.Data
     {
         public DbSet<Company> Companies { get; set; }
         public DbSet<AppTask> Tasks { get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -15,6 +16,9 @@ namespace llm_credit_score_api.Data
         {
             modelBuilder.Entity<Company>().ToTable("company_metadata");
             modelBuilder.Entity<AppTask>().ToTable("tasks");
+            modelBuilder.Entity<Report>().ToTable("reports");
+            modelBuilder.Entity<Report>().HasOne(e => e.Company).WithMany(e => e.Reports).HasForeignKey(e => e.CompanyId);
+            modelBuilder.Entity<Report>().HasOne(e => e.Task).WithOne(e => e.Report).HasForeignKey<Report>(e => e.TaskId).IsRequired(false);
         }
     }
 }

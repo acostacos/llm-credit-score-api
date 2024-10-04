@@ -10,11 +10,13 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IMessageService, MessageService>();
 builder.Services.AddScoped<IAppDbContext, AppDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IGeneratorService, GeneratorService>();
 
 builder.Services.AddHostedService<GeneratorWorker>();
 

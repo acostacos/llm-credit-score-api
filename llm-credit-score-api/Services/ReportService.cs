@@ -30,7 +30,7 @@ namespace llm_credit_score_api.Services
             try
             {
                 var companyRepo = _unitOfWork.GetRepository<Company>();
-                var company = companyRepo.Find(x => x.CompanyId == request.CompanyId);
+                var company = companyRepo.Find(x => x.CompanyId == request.CompanyId)?.FirstOrDefault();
                 if (company == null)
                 {
                     throw new Exception("Invalid company passed");
@@ -49,7 +49,7 @@ namespace llm_credit_score_api.Services
                 {
                     throw new Exception("Task not created");
                 }
-                return new GenerateReportResponse() { Task = response.Task };
+                return new GenerateReportResponse() { Task = response.Task, Company = company };
             }
             catch (Exception ex)
             {

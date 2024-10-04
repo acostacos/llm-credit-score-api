@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace llm_credit_score_api.Models
 {
     public class Company
     {
-        [Column("company_id")]
+        [Key, Column("company_id")]
         public int CompanyId { get; set; }
         [Column("company_name")]
         public string? CompanyName { get; set; }
@@ -40,5 +41,6 @@ namespace llm_credit_score_api.Models
         public DateTime? EndDate { get; set; }
         [Column("flag")]
         public int Flag { get; set; }
+        public List<Report>? Reports { get; set; }
     }
 }
