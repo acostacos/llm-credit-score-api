@@ -6,23 +6,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace llm_credit_score_api.Controllers
 {
-    [Route("api/report")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ReportController : ControllerBase
     {
-        private IViewReportService _viewReportService;
-        private IGenerateReportService _generateReportService;
+        private readonly IReportService _reportService;
 
-        public ReportController(IViewReportService viewReportService, IGenerateReportService generateReportService)
+        public ReportController(IReportService reportService)
         {
-            _viewReportService = viewReportService;
-            _generateReportService = generateReportService;
+            _reportService = reportService;
         }
 
-        [HttpGet("view")]
-        public IActionResult ViewReports()
+        [HttpGet("get")]
+        public IActionResult GetReport([FromQuery] GetReportRequest request)
         {
-            var response = _viewReportService.ViewReports();
+            var response = _reportService.GetReport(request);
             if (response.Exception != null)
             {
                 return BadRequest(response);
@@ -33,7 +31,7 @@ namespace llm_credit_score_api.Controllers
         [HttpPost("generate")]
         public IActionResult GenerateReport([FromBody] GenerateReportRequest request)
         {
-            var response = _generateReportService.GenerateReport(request);
+            var response = _reportService.GenerateReport(request);
             if (response.Exception != null)
             {
                 return BadRequest(response);

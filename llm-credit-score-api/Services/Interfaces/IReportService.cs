@@ -2,8 +2,9 @@
 
 namespace llm_credit_score_api.Services.Interfaces
 {
-    public interface IGenerateReportService
+    public interface IReportService
     {
+        public GetReportResponse GetReport(GetReportRequest request);
         public GenerateReportResponse GenerateReport(GenerateReportRequest request);
     }
 }
