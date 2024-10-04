@@ -17,9 +17,9 @@ namespace llm_credit_score_api.Controllers
         }
 
         [HttpGet("get")]
-        public IActionResult GetTask([FromQuery] GetTaskRequest request)
+        public async Task<IActionResult> GetTask([FromQuery] GetTaskRequest request)
         {
-            var response = _taskService.GetTask(request);
+            var response = await _taskService.GetTask(request);
             if (response.Exception != null)
             {
                 return BadRequest(response);

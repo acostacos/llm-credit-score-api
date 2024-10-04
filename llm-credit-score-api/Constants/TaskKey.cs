@@ -1,7 +1,8 @@
 ﻿namespace llm_credit_score_api.Constants
 {
-    public enum TaskKey
+    public static class TaskKey
     {
-        GenerateReport,
+        public const string GenerateReport = "generate_report";
     }
 }
+

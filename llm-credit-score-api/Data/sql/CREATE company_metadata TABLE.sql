@@ -1,0 +1,41 @@
+CREATE TABLE company_metadata (
+    company_id INTEGER PRIMARY KEY,
+    company_name TEXT,
+    country_name TEXT,
+    security_number INTEGER NOT NULL,
+    ticker TEXT,
+    id_bb_unique TEXT,
+    id_bb_company TEXT,
+    security_type TEXT,
+    market_status TEXT,
+    exchange_country_id INTEGER NOT NULL,
+    domicile_id INTEGER NOT NULL,
+    industry_sector_num INTEGER NOT NULL,
+    industry_group_num INTEGER NOT NULL,
+    industry_subgroup_num INTEGER NOT NULL,
+    revision INTEGER NOT NULL,
+    start_date TEXT,
+    end_date TEXT,
+    flag INTEGER NOT NULL
+);
+
+INSERT INTO company_metadata SELECT 
+  json_extract(value, '$.company_id'), 
+  json_extract(value, '$.company_name'), 
+  json_extract(value, '$.country_name'), 
+  json_extract(value, '$.security_number'), 
+  json_extract(value, '$.ticker'), 
+  json_extract(value, '$.id_bb_unique'), 
+  json_extract(value, '$.id_bb_company'), 
+  json_extract(value, '$.security_type'), 
+  json_extract(value, '$.market_status'), 
+  json_extract(value, '$.exchange_country_id'), 
+  json_extract(value, '$.domicile_id'), 
+  json_extract(value, '$.industry_sector_num'), 
+  json_extract(value, '$.industry_group_num'), 
+  json_extract(value, '$.industry_subgroup_num'), 
+  json_extract(value, '$.revision'), 
+  json_extract(value, '$.start_date'), 
+  json_extract(value, '$.end_date'), 
+  json_extract(value, '$.flag') 
+FROM json_each(readfile('../json/company_metadata.json'));

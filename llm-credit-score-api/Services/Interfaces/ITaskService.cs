@@ -4,7 +4,7 @@ namespace llm_credit_score_api.Services.Interfaces
 {
     public interface ITaskService
     {
-        public GetTaskResponse GetTask(GetTaskRequest request);
-        public CreateTaskResponse CreateTask(CreateTaskRequest request);
+        public Task<GetTaskResponse> GetTask(GetTaskRequest request);
+        public Task<CreateTaskResponse> CreateTask(CreateTaskRequest request);
     }
 }

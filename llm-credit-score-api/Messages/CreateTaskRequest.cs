@@ -4,6 +4,7 @@ namespace llm_credit_score_api.Messages
 {
     public class CreateTaskRequest
     {
-        public TaskKey TaskKey { get; set; }
+        public required string TaskKey { get; set; }
+        public int CompanyId { get; set; }
     }
 }

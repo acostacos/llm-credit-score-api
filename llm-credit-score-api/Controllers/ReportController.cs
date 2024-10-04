@@ -29,9 +29,9 @@ namespace llm_credit_score_api.Controllers
         }
 
         [HttpPost("generate")]
-        public IActionResult GenerateReport([FromBody] GenerateReportRequest request)
+        public async Task<IActionResult> GenerateReport([FromBody] GenerateReportRequest request)
         {
-            var response = _reportService.GenerateReport(request);
+            var response = await _reportService.GenerateReport(request);
             if (response.Exception != null)
             {
                 return BadRequest(response);

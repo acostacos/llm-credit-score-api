@@ -1,10 +1,11 @@
 ﻿namespace llm_credit_score_api.Constants
 {
-    public enum TaskStat
+    public static class TaskStat
     {
-        Queued,
-        InProgress,
-        Error,
-        Done,
+        public const string Queued = "Queued";
+        public const string InProgress = "InProgress ";
+        public const string Error = "Error";
+        public const string Done = "Done";
     }
 }
+
