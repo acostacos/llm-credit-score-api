@@ -1,2 +1,3 @@
 .vs
-
+llm-credit-score-api/bin/**
+llm-credit-score-api/obj/**

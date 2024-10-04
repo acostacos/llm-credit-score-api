@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("llm-credit-score-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+380726d3bb19ad8797eea47fb72b09ee8cd10120")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13e94121b5ddcb243ec7172b7ada26a72503bd58")]
 [assembly: System.Reflection.AssemblyProductAttribute("llm-credit-score-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("llm-credit-score-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

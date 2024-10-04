@@ -1,11 +1,24 @@
+using llm_credit_score_api.Data;
+using llm_credit_score_api.Data.Interfaces;
+using llm_credit_score_api.Repository;
+using llm_credit_score_api.Repository.Interfaces;
+using llm_credit_score_api.Services;
+using llm_credit_score_api.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<IGenerateReportService, GenerateReportService>();
+builder.Services.AddScoped<IViewReportService, ViewReportService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.WebHost.UseUrls("https://localhost:5000");
 
 var app = builder.Build();
 

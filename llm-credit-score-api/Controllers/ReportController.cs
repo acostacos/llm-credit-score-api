@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using llm_credit_score_api.Messages;
+using llm_credit_score_api.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,21 +10,37 @@ namespace llm_credit_score_api.Controllers
     [ApiController]
     public class ReportController : ControllerBase
     {
+        private IViewReportService _viewReportService;
+        private IGenerateReportService _generateReportService;
+
+        public ReportController(IViewReportService viewReportService, IGenerateReportService generateReportService)
+        {
+            _viewReportService = viewReportService;
+            _generateReportService = generateReportService;
+        }
+
         [HttpGet("view")]
-        public IEnumerable<string> ViewReport()
+        public IActionResult ViewReports()
         {
-            return new string[] { "value1", "value2" };
+            var response = _viewReportService.ViewReports();
+            if (response.Exception != null)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
 
-        [HttpGet("view/{id}")]
-        public string ViewReport(int id)
+        [HttpPost("generate")]
+        public IActionResult GenerateReport([FromBody] GenerateReportRequest request)
         {
-            return "value";
+            var response = _generateReportService.GenerateReport(request);
+            if (response.Exception != null)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
         }
 
-        [HttpPost]
-        public void GenerateReport([FromBody] string value)
-        {
-        }
     }
 }
+
