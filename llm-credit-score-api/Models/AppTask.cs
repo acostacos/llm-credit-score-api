@@ -11,6 +11,8 @@ namespace llm_credit_score_api.Models
         public required string TaskKey { get; set; }
         [Column("status")]
         public required string Status { get; set; }
+        [Column("message")]
+        public string? Message { get; set; }
         [Column("company_id")]
         public int CompanyId { get; set; }
         [Column("report_id")]

@@ -1,4 +1,5 @@
 ﻿using llm_credit_score_api.Constants;
+using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services.Interfaces;
@@ -81,7 +82,8 @@ namespace llm_credit_score_api.Services
         private async void SendAPIRequest()
         {
             // Do Exponential Backoff
-            var response = await _messageService.PostAsync(LLMConstants.Url, new object());
+            var body = new LLMRequest();
+            var response = await _messageService.PostAsync<LLMResponse>(LLMConstants.Url, body);
         }
     }
 }

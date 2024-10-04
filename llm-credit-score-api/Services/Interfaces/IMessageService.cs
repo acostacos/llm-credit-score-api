@@ -2,6 +2,6 @@
 {
     public interface IMessageService
     {
-        public Task PostAsync(string url, object body);
+        public Task<T> PostAsync<T>(string url, object body);
     }
 }

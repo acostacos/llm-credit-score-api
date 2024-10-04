@@ -14,7 +14,7 @@ namespace llm_credit_score_api.Services
             _logger = logger;
         }
 
-        public async Task PostAsync(string url, object body)
+        public async Task<T> PostAsync<T>(string url, object body)
         {
             try
             {
@@ -24,7 +24,14 @@ namespace llm_credit_score_api.Services
                 var response = await _httpClient.PostAsync(url, content);
                 response.EnsureSuccessStatusCode();
                 string responseData = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseData);
+
+                var json = JsonSerializer.Deserialize<T>(responseData);
+                if (json == null)
+                {
+                    throw new Exception("Error parsing JSON response");
+                }
+
+                return json;
             }
             catch (Exception ex)
             {
