@@ -2,5 +2,7 @@
 {
     public class GetTaskRequest
     {
+        public int PageNum { get; set; }
+        public int PageSize { get; set; }
     }
 }

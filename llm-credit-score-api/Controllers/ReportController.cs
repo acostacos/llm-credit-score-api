@@ -21,7 +21,18 @@ namespace llm_credit_score_api.Controllers
         public async Task<IActionResult> GetReport([FromQuery] GetReportRequest request)
         {
             var response = await _reportService.GetReport(request);
-            if (response.Exception != null)
+            if (response.Error != null)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetReports(int id)
+        {
+            var response = await _reportService.GetReport(id);
+            if (response.Error != null)
             {
                 return BadRequest(response);
             }
@@ -32,7 +43,7 @@ namespace llm_credit_score_api.Controllers
         public async Task<IActionResult> GenerateReport([FromBody] GenerateReportRequest request)
         {
             var response = await _reportService.GenerateReport(request);
-            if (response.Exception != null)
+            if (response.Error != null)
             {
                 return BadRequest(response);
             }

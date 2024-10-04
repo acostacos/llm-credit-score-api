@@ -1,6 +1,5 @@
 ﻿using llm_credit_score_api.Data.Interfaces;
 using llm_credit_score_api.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace llm_credit_score_api.Repositories
@@ -18,29 +17,27 @@ namespace llm_credit_score_api.Repositories
             _context.Set<T>().Add(entity);
         }
 
-        public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
+        public IQueryable<T> Query()
+        {
+            return _context.Set<T>().AsQueryable();
+        }
+
+        public IQueryable<T> Query(int pageNum, int pageSize)
+        {
+            var pn = pageNum > 0 ? pageNum : 1;
+            var ps = pageSize > 0 ? pageSize : 10;
+
+            return _context.Set<T>().Skip((pn-1) * ps).Take(ps);
+        }
+
+        public IQueryable<T> Query(Expression<Func<T, bool>> expression)
         {
             return _context.Set<T>().Where(expression);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<T?> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().ToListAsync();
-        }
-
-        public IEnumerable<T> GetAll()
-        {
-            return _context.Set<T>().ToList();
-        }
-
-        public T? GetById(int id)
-        {
-            return _context.Set<T>().Find(id);
-        }
-
-        public void Remove(T entity)
-        {
-            _context.Set<T>().Remove(entity);
+            return await _context.Set<T>().FindAsync(id);
         }
     }
 }

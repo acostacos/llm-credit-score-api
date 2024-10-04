@@ -1,4 +1,5 @@
-﻿using llm_credit_score_api.Messages;
+﻿using llm_credit_score_api.Constants;
+using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Services.Interfaces;
 using System.Threading.Channels;
@@ -38,15 +39,12 @@ namespace llm_credit_score_api
             try
             {
                 using var scope = _serviceProvider.CreateScope();
-                var generatorService = scope.ServiceProvider.GetRequiredService<IGeneratorService>();
-                await generatorService.GenerateReport(task.TaskId);
 
-                //var queuedTasks = generatorService.GetQueuedTasks();
-                //if (queuedTasks.Count() > 0)
-                //{
-                //    var task = queuedTasks.First();
-                //    await generatorService.GenerateReport(task.TaskId);
-                //}
+                if (task.TaskKey == TaskKey.GenerateReport)
+                {
+                    var generatorService = scope.ServiceProvider.GetRequiredService<IGeneratorService>();
+                    await generatorService.GenerateReport(task.TaskId);
+                }
             }
             catch (Exception ex)
             {

@@ -2,6 +2,6 @@
 {
     public class BaseResponse
     {
-        public Exception? Exception { get; set; }
+        public string? Error { get; set; }
     }
 }

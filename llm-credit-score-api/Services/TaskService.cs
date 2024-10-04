@@ -3,6 +3,7 @@ using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Channels;
 
 namespace llm_credit_score_api.Services
@@ -25,13 +26,35 @@ namespace llm_credit_score_api.Services
             try
             {
                 var taskRepo = _unitOfWork.GetRepository<AppTask>();
-                var tasks = await taskRepo.GetAllAsync();
+                var query = request.PageSize > 0 ? taskRepo.Query(request.PageNum, request.PageSize) : taskRepo.Query();
+                var tasks = await query
+                    .Include(x => x.Report)
+                    .OrderByDescending(x => x.CreateDate)
+                    .ToListAsync();
                 return new GetTaskResponse() { Tasks = tasks };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new GetTaskResponse() { Exception = ex };
+                return new GetTaskResponse() { Error = ex.Message };
+            }
+        }
+
+        public async Task<GetTaskResponse> GetTask(int id)
+        {
+            try
+            {
+                var taskRepo = _unitOfWork.GetRepository<AppTask>();
+                var task = await taskRepo.Query(x => x.TaskId == id)
+                    .Include(x => x.Report)
+                    .FirstOrDefaultAsync();
+                var tasks = task != null ? new List<AppTask>() { task } : [];
+                return new GetTaskResponse() { Tasks = tasks };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new GetTaskResponse() { Error = ex.Message };
             }
         }
 
@@ -56,7 +79,7 @@ namespace llm_credit_score_api.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new CreateTaskResponse() { Exception = ex };
+                return new CreateTaskResponse() { Error = ex.Message };
             }
         }
     }

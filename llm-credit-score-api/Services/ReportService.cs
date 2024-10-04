@@ -3,6 +3,7 @@ using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace llm_credit_score_api.Services
 {
@@ -24,13 +25,37 @@ namespace llm_credit_score_api.Services
             try
             {
                 var reportRepo = _unitOfWork.GetRepository<Report>();
-                var reports = await reportRepo.GetAllAsync();
+                var query = request.PageSize > 0 ? reportRepo.Query(request.PageNum, request.PageSize) : reportRepo.Query();
+                var reports = await query
+                    .Include(x => x.Company)
+                    .Include(x => x.Task)
+                    .OrderByDescending(x => x.CreateDate)
+                    .ToListAsync();
                 return new GetReportResponse() { Reports = reports };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new GetReportResponse() { Exception = ex };
+                return new GetReportResponse() { Error = ex.Message };
+            }
+        }
+
+        public async Task<GetReportResponse> GetReport(int id)
+        {
+            try
+            {
+                var reportRepo = _unitOfWork.GetRepository<Report>();
+                var report = await reportRepo.Query(x => x.ReportId == id)
+                    .Include(x => x.Company)
+                    .Include(x => x.Task)
+                    .FirstOrDefaultAsync();
+                var reports = report != null ? new List<Report>() { report } : [];
+                return new GetReportResponse() { Reports = reports };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return new GetReportResponse() { Error = ex.Message };
             }
         }
 
@@ -54,7 +79,7 @@ namespace llm_credit_score_api.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new CreateReportResponse() { Exception = ex };
+                return new CreateReportResponse() { Error = ex.Message };
             }
         }
 
@@ -63,31 +88,21 @@ namespace llm_credit_score_api.Services
             try
             {
                 var companyRepo = _unitOfWork.GetRepository<Company>();
-                var company = companyRepo.Find(x => x.CompanyId == request.CompanyId)?.FirstOrDefault();
-                if (company == null)
-                {
-                    throw new Exception("Invalid company passed");
-                }
+                var company = await companyRepo.GetByIdAsync(request.CompanyId) ?? throw new Exception("Invalid company passed");
 
                 var createTaskRequest = new CreateTaskRequest() {
                     TaskKey = TaskKey.GenerateReport,
                     CompanyId = request.CompanyId,
                 };
                 var response = await _taskService.CreateTask(createTaskRequest);
-                if (response.Exception != null)
-                {
-                    throw response.Exception;
-                }
-                if (response.Task == null)
-                {
-                    throw new Exception("Task not created");
-                }
-                return new GenerateReportResponse() { Task = response.Task, Company = company };
+                var newTask = response.Task ?? throw new Exception(response.Error ?? "Task not created");
+
+                return new GenerateReportResponse() { Task = newTask, Company = company };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return new GenerateReportResponse() { Exception = ex };
+                return new GenerateReportResponse() { Error = ex.Message };
             }
         }
     }

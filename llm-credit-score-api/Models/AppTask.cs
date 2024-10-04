@@ -19,6 +19,6 @@ namespace llm_credit_score_api.Models
         public int? ReportId { get; set; }
         [Column("create_date")]
         public DateTime CreateDate { get; set; }
-        public Report? Report { get; set; }
+        public virtual Report? Report { get; set; }
     }
 }
