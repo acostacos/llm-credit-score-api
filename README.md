@@ -52,8 +52,8 @@ Run the *run.sh* script located in the base directory.
     <td rowSpan="3">id</td>
     <td rowSpan="3">int; ID of Report to query</td>
     <tr>
-      <td>report</td>
-      <td>Report; Report with specified id</td>
+      <td>reports</td>
+      <td>Report array; Report with specified id</td>
     </tr>
     <tr>
       <td>error</td>
@@ -78,6 +78,133 @@ Run the *run.sh* script located in the base directory.
       <td>error</td>
       <td>string; Error encountered in endpoint</td>
     </tr>
+  </tr>
+</table>
+
+### Task Endpoint
+<table>
+  <tr>
+    <th>Endpoint</th>
+    <th>HTTP Method</th>
+    <th>Description</th>
+    <th colSpan="2">Request</th>
+    <th colSpan="2">Response</th>
+  </tr>
+  <tr>
+    <td rowSpan="3">api/task/get</td>
+    <td rowSpan="3">GET</td>
+    <td rowSpan="3">Retrieve a list of tasks</td>
+    <tr>
+      <td>pageSize</td>
+      <td>int; Size of query page</td>
+      <td>tasks</td>
+      <td>Task array; List of retrieved tasks</td>
+    </tr>
+    <tr>
+      <td>pageNum</td>
+      <td>int; Page number of query</td>
+      <td>error</td>
+      <td>string; Error encountered in endpoint</td>
+    </tr>
+  </tr>
+  <tr>
+    <td rowSpan="3">api/task/get/{id}</td>
+    <td rowSpan="3">GET</td>
+    <td rowSpan="3">Retrieve a specific task</td>
+    <td rowSpan="3">id</td>
+    <td rowSpan="3">int; ID of Task to query</td>
+    <tr>
+      <td>tasks</td>
+      <td>Task array; Task with specified id</td>
+    </tr>
+    <tr>
+      <td>error</td>
+      <td>string; Error encountered in endpoint</td>
+    </tr>
+  </tr>
+</table>
+
+### Report Object
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>reportId</td>
+    <td>int; ID of Report</td>
+  </tr>
+  <tr>
+    <td>createDate</td>
+    <td>string; Date Created</td>
+  </tr>
+  <tr>
+    <td>content</td>
+    <td>string; Content of Report</td>
+  </tr>
+  <tr>
+    <td>taskId</td>
+    <td>int; ID of associated Task</td>
+  </tr>
+  <tr>
+    <td>task</td>
+    <td>Task; Object of associated Task</td>
+  </tr>
+  <tr>
+    <td>companyId</td>
+    <td>int; ID of associated Company</td>
+  </tr>
+  <tr>
+    <td>company</td>
+    <td>Company; Object of associated Company</td>
+  </tr>
+</table>
+
+### Task Object
+<table>
+  <tr>
+    <th>Property</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>taskId</td>
+    <td>int; ID of Task</td>
+  </tr>
+  <tr>
+    <td>taskKey</td>
+    <td>string; Unique key identifying type of task</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>string; Status of Task</td>
+  </tr>
+  <tr>
+    <td>message</td>
+    <td>string; Message from Task</td>
+  </tr>
+  <tr>
+    <td>createDate</td>
+    <td>string; Date Created</td>
+  </tr>
+  <tr>
+    <td>companyId</td>
+    <td>int; ID of Company for generate report task</td>
+  </tr>
+  <tr>
+    <td>task</td>
+    <td>Task; Object of associated Task</td>
+  </tr>
+  <tr>
+    <td>company</td>
+    <td>Company; Object of associated Company</td>
+  </tr>
+  <tr>
+    <td>reportId</td>
+    <td>int?; ID of associated Report, nullable</td>
+  </tr>
+  <tr>
+    <td>report</td>
+    <td>Report?; Object of associated Report, nullable</td>
   </tr>
 </table>
 
