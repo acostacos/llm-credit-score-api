@@ -25,20 +25,84 @@ Run the *run.sh* script located in the base directory.
     <th>Endpoint</th>
     <th>HTTP Method</th>
     <th>Description</th>
-    <th>Request</th>
-    <th>Response</th>
+    <th colSpan="2">Request</th>
+    <th colSpan="2">Response</th>
   </tr>
   <tr>
-    <td>api/report/get</td>
-    <td>GET</td>
+    <td rowSpan="3">api/report/get</td>
+    <td rowSpan="3">GET</td>
+    <td rowSpan="3">Retrieve a list of reports</td>
+    <tr>
+      <td>int pageSize</td>
+      <td>Size of query page</td>
+      <td>array reports</td>
+      <td>
+        int reportId: ID of Report</br>
+        string createDate: Date Created</br>
+        string content: Content of Report</br>
+        int taskId: ID of associated Task</br>
+        Task task: Object of associated Task</br>
+        int companyId: ID of associated Company</br>
+        Company company: Object of associated Company
+      </td>
+    </tr>
+    <tr>
+      <td>int pageNum</td>
+      <td>Page number of query</td>
+      <td>string error</td>
+      <td>Error encountered in endpoint</td>
+    </tr>
   </tr>
   <tr>
-    <td>api/report/get/{id}</td>
-    <td>GET</td>
+    <td rowSpan="3">api/report/get/{id}</td>
+    <td rowSpan="3">GET</td>
+    <td rowSpan="3">Retrieve a specific report</td>
+    <td rowSpan="3">int id</td>
+    <td rowSpan="3">ID of Report to query</td>
+    <tr>
+      <td>Report report</td>
+      <td>
+        int reportId: ID of Report</br>
+        string createDate: Date Created</br>
+        string content: Content of Report</br>
+        int taskId: ID of associated Task</br>
+        Task task: Object of associated Task</br>
+        int companyId: ID of associated Company</br>
+        Company company: Object of associated Company
+      </td>
+    </tr>
+    <tr>
+      <td>string error</td>
+      <td>Error encountered in endpoint</td>
+    </tr>
   </tr>
   <tr>
-    <td>api/report/generate</td>
-    <td>POST</td>
+    <td rowSpan="4">api/report/generate</td>
+    <td rowSpan="4">POST</td>
+    <td rowSpan="4">Generate report for a specified company</td>
+    <td rowSpan="4">int companyId</td>
+    <td rowSpan="4">ID of Company to generate report for</td>
+    <tr>
+      <td>Task task</td>
+      <td>
+        int taskId: ID of Task</br>
+        string taskKey: Unique key identifying type of task</br>
+        string status: Task status </br>
+        string message: Message from task </br>
+        int companyId: ID of Company for generate report task</br>
+        string createDate: Date Created</br>
+        int? reportId: ID of Report associated with task</br>
+        report? report: Object of Report associated with task
+      </td>
+    </tr>
+    <tr>
+      <td>Company company</td>
+      <td>Object of associated Company for generate report task</td>
+    </tr>
+    <tr>
+      <td>string error</td>
+      <td>Error encountered in endpoint</td>
+    </tr>
   </tr>
 </table>
 
