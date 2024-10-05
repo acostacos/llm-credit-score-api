@@ -41,5 +41,5 @@ class Handler(BaseHTTPRequestHandler):
 
 address = ('', 5001)
 server = HTTPServer(address, Handler)
-print("Starting server...")
+print("Starting server on port 5001...")
 server.serve_forever()
