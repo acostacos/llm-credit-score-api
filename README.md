@@ -210,7 +210,12 @@ Run the *run.sh* script located in the base directory.
 
 # Architecture
 
-# Tech Stack
+Below is a diagram showing the process for generating a report.
+
+![Process for Report Generation](./generate_report_diagram.png "Process for Report Generation")
+The process is triggered through the generate report endpoint in the ReportController. This request is processed by the ReportService that first checks if the company we are generating a report for is valid. If it passes the validation, it calls TaskService to create a new Generate Report Task and adds that task to a queue. A background service, GeneratorWorker, is watching the queue waiting for new tasks to be processed. Once it retrieves a task from the queue, it sends it to GeneratorService to be processed. It first queries the company information and uses this to build a prompt for the LLM. We then send this prompt to the MessageService which makes an API call to the LLM via http. For our prototype, we are just calling a mock LLM server that returns a dummy response. Once we ge this response, MessageService then returns this to the GeneratorService. This service, in turn, would save the report to the database and update our task status to be completed.
+
+There is an endpoint to retrieve tasks in the TaskController which simply retrieves the tasks from our database. This is mainly used to check if our generate report task has been completed. This could be converted to a WebSocket to remove the need for recurring calls. Lastly, there is also an endpoint in the ReportController to retrieve the generated reports. The id identifying the report could be found in the task that generated that report.
 
 # File Structure
 
