@@ -3,6 +3,7 @@ using llm_credit_score_api.Messages;
 using llm_credit_score_api.Models;
 using llm_credit_score_api.Repositories.Interfaces;
 using llm_credit_score_api.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -101,10 +102,21 @@ namespace llm_credit_score_api.Services
 
         private async Task<string> GetLLMResponse(string prompt)
         {
-            var body = new LLMRequest();
+            var body = new LLMRequest()
+            {
+                Model = LLMConstants.Model,
+                Messages = new List<InputMessage>()
+                {
+                    new InputMessage()
+                    {
+                        Role = "user",
+                        Content = prompt,
+                    }
+                },
+            };
             var jsonDecodeOpt = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
             var response = await _messageService.PostAsync<LLMResponse>(LLMConstants.Url, body, jsonDecodeOpt);
-            var message = response.Choices.FirstOrDefault(x => x.Message.Role == "assistant")?.Message.Content;
+            var message = response?.Choices?.FirstOrDefault(x => x?.Message?.Role == "assistant")?.Message?.Content;
             return message ?? "";
         }
 

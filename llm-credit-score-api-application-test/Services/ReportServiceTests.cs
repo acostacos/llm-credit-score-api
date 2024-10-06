@@ -90,6 +90,7 @@ namespace llm_credit_score_api_application_test.Services
 
             _mockReportRepository.Verify(x => x.GetReportAsync(expected.ReportId), Times.Once());
             Assert.Null(output.Error);
+            Assert.NotNull(output.Reports);
             Assert.Equal(expected, output.Reports.First());
         }
 
@@ -118,6 +119,7 @@ namespace llm_credit_score_api_application_test.Services
             _mockReportRepository.Verify(x => x.Add(It.IsAny<Report>()), Times.Once);
             _mockUnitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
             Assert.Null(output.Error);
+            Assert.NotNull(output.Report);
             Assert.Equal(output.Report.CompanyId, companyId);
             Assert.Equal(output.Report.TaskId, taskId);
             Assert.Equal(output.Report.Content, content);

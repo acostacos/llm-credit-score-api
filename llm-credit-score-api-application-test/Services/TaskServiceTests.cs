@@ -87,6 +87,7 @@ namespace llm_credit_score_api_application_test.Services
 
             _mockTaskRepository.Verify(x => x.GetTaskAsync(expected.TaskId), Times.Once());
             Assert.Null(output.Error);
+            Assert.NotNull(output.Tasks);
             Assert.Equal(expected, output.Tasks.First());
         }
 
@@ -115,6 +116,7 @@ namespace llm_credit_score_api_application_test.Services
             _mockUnitOfWork.Verify(x => x.SaveChangesAsync(), Times.Once);
             _mockChannel.Verify(x => x.WriteAsync(It.IsAny<AppTask>(), It.IsAny<CancellationToken>()), Times.Once);
             Assert.Null(output.Error);
+            Assert.NotNull(output.Task);
             Assert.Equal(output.Task.TaskKey, taskKey);
             Assert.Equal(output.Task.CompanyId, companyId);
         }

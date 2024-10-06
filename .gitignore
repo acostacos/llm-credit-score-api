@@ -1,4 +1,8 @@
 .vs
 llm-credit-score-api/bin/**
 llm-credit-score-api/obj/**
+llm-credit-score-api-application/bin/**
+llm-credit-score-api-application/obj/**
+llm-credit-score-api-application-test/bin/**
+llm-credit-score-api-application-test/obj/**
 **/sqlite3.exe

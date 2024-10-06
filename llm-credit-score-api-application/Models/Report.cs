@@ -15,7 +15,7 @@ namespace llm_credit_score_api.Models
         public DateTime CreateDate { get; set; }
         [Column("content")]
         public string? Content { get; set; }
-        public virtual Company Company { get; set; }
-        public virtual AppTask Task { get; set; }
+        public virtual Company? Company { get; set; }
+        public virtual AppTask? Task { get; set; }
     }
 }

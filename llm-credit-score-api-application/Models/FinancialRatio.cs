@@ -10,7 +10,7 @@ namespace llm_credit_score_api.Models
         [Column("company_id")]
         public int CompanyId { get; set; }
         [Column("company_name")]
-        public string CompanyName { get; set; }
+        public string? CompanyName { get; set; }
         [Column("fiscal_year")]
         public int FiscalYear { get; set; }
         [Column("latest_update_date")]
