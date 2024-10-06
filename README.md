@@ -219,3 +219,108 @@ There is an endpoint to retrieve tasks in the TaskController which simply retrie
 
 # File Structure
 
+### llm-credit-score-api
+.NET Project for running web API and for background services. 
+```
+├───Program.cs
+├───GeneratorWorker.cs
+├───BackgroundServices
+│   └───Interfaces
+│       GeneratorService.cs
+│       MessageService.cs
+└───Controllers
+        ReportController.cs
+        TaskController.cs
+```
+Program.cs - starting point of application. Where we register all the services we will use.
+
+GeneratorWorker.cs - Background task that handles watching queue for new generate report tasks.
+
+BackgroundServices/GeneratorService.cs - Handles logic for generating report. Queries necessary data from DB, builds prompt and saves generated report to DB.
+
+BackgroundServices/MessageService.cs - Handles sending HTTP calls. Mainly used to get LLM response from generated prompt.
+
+Controllers/ReportController.cs - Entrypoint of API for the endpoints beginning with `api/report`
+
+Controllers/TaskController.cs - Entrypoint of API for the endpoints beginning with `api/task`
+
+### llm-credit-score-api-application
+.NET Project for main business logic.
+```
+├───Constants
+│       LLMConstants.cs
+│       TaskKey.cs
+│       TaskStat.cs
+├───Data
+│   │   AppDbContext.cs
+│   ├───Interfaces
+│   ├───json
+│   └───sql
+│           db.db
+├───Messages
+├───Models
+│       AppTask.cs
+│       Company.cs
+│       FinancialRatio.cs
+│       Report.cs
+├───Repositories
+│   │   ReportRepository.cs
+│   │   Repository.cs
+│   │   TaskRepository.cs
+│   │   UnitOfWork.cs
+│   └───Interfaces
+└───Services
+    │   ReportService.cs
+    │   TaskService.cs
+    └───Interfaces
+```
+Constants/LLMConstants.cs - Constants used for interacting wtih the LLM.
+
+Constants/TaskKey.cs - Supported background task keys.
+
+Constants/TaskStat.cs - Supported task status.
+
+Data/AppDbContext.cs - EF Core Context that handles defining our Database structure.
+
+Data/json/ - folder containing given json data.
+
+Data/sql/ - folder containing SQL Scripts used for populating the Database.
+
+Data/sq/db.db - SQLite Database used by application.
+
+Messages/ - folder containing request and response models of API.
+
+Models/AppTask.cs - Model for Task object. Maps to tasks SQL table.
+
+Models/Report.cs - Model for Report object. Maps to reports SQL table.
+
+Models/Company.cs - Model for Company object. Maps to company_metadata SQL table.
+
+Models/FinancialRatio.cs - Model for FinancialRatio object. Maps to company_financial_ratios SQL table.
+
+Repositories/Repository.cs - Handles EF Core logic for querying to Database.
+
+Repositories/ReportRepository.cs - Custom Repository for Report objects.
+
+Repositories/TaskRepository.cs - Custom Repository for Task objects.
+
+Repositories/UnitOfWork.cs - Encapsulates Repositories and Database transactions.
+
+Services/ReportService.cs - Service that handles logic for API calls for Report objects. Linked to ReportController.cs.
+
+Services/TaskService.cs - Service that handles logic for API calls for Task objects. Linked to TaskController.cs.
+
+### mock-llm-server
+Simple HTTP server in Python to mock API call to LLM.
+
+```
+    credit_report.txt
+    main.py
+```
+
+main.py - Creates and runs HTTP server
+
+credit_report.txt - Simulated credit report output of LLM
+
+### llm-credit-score-api-application-tests
+Project containing unit tests for llm-credit-score-api-application

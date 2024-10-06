@@ -24,7 +24,7 @@ CREATE TABLE company_financial_ratios (
 );
 
 INSERT INTO company_financial_ratios SELECT 
-  CAST(CONCAT(json_extract(value, '$.company_id'), json_extract(value, '$.fiscal_year')) AS INTEGER) as company_financial_ratio_id,
+  CAST((json_extract(value, '$.company_id') || json_extract(value, '$.fiscal_year')) AS INTEGER) as company_financial_ratio_id,
   json_extract(value, '$.company_id'),
   json_extract(value, '$.company_name'),
   json_extract(value, '$.fiscal_year'),
