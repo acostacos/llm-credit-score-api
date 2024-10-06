@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "llm-credit-score-api", "llm-credit-score-api\llm-credit-score-api.csproj", "{2A490359-5C9F-473F-B54D-2BD4949B83F9}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "llm-credit-score-api-application", "llm-credit-score-api-application\llm-credit-score-api-application.csproj", "{75C62A58-81FC-4EB3-AEA2-BF6EF164809A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "llm-credit-score-api-application-test", "llm-credit-score-api-application-test\llm-credit-score-api-application-test.csproj", "{04707F64-155C-4FE2-B055-E8718B122007}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{2A490359-5C9F-473F-B54D-2BD4949B83F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A490359-5C9F-473F-B54D-2BD4949B83F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A490359-5C9F-473F-B54D-2BD4949B83F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75C62A58-81FC-4EB3-AEA2-BF6EF164809A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75C62A58-81FC-4EB3-AEA2-BF6EF164809A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75C62A58-81FC-4EB3-AEA2-BF6EF164809A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75C62A58-81FC-4EB3-AEA2-BF6EF164809A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04707F64-155C-4FE2-B055-E8718B122007}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04707F64-155C-4FE2-B055-E8718B122007}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04707F64-155C-4FE2-B055-E8718B122007}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04707F64-155C-4FE2-B055-E8718B122007}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

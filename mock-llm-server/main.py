@@ -1,6 +1,7 @@
 from http.server import *
 import json
-  
+import os
+
 class Handler(BaseHTTPRequestHandler): 
     def do_POST(self): 
         
@@ -33,7 +34,8 @@ class Handler(BaseHTTPRequestHandler):
           }
         }
 
-        with open('credit_report.txt', 'r') as file:
+        file_path = os.path.join(os.path.dirname(__file__), 'credit_report.txt')
+        with open(file_path, 'r') as file:
             response_data["choices"][0]["message"]["content"] = file.read()
 
         json_response = json.dumps(response_data)
